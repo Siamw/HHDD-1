@@ -22,7 +22,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="60dp"
         android:gravity="center"
-        android:text="write" />
+        android:text="" />
 
     <TextView
         android:id="@+id/second_view_total"

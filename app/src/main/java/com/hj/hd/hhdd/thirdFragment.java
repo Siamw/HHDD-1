@@ -19,6 +19,7 @@ import org.w3c.dom.Text;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileReader;
 import java.io.InputStreamReader;
@@ -36,8 +37,8 @@ public class thirdFragment extends Fragment{
 
     // 리스트뷰 관련
     private ListView listView;
-    private ArrayList<HashMap<String, String>> Data = new ArrayList<HashMap<String, String>>();
-    private HashMap<String, String> listItem;
+    //private ArrayList<HashMap<String, String>> Data = new ArrayList<HashMap<String, String>>();
+    //private HashMap<String, String> listItem;
     StringTokenizer st;
     String strDate;
     String strContext;
@@ -57,7 +58,6 @@ public class thirdFragment extends Fragment{
     int i_nowYear;
     int i_nowMonth;
 
-
     int sysYear;
     int sysMonth;
 
@@ -66,9 +66,15 @@ public class thirdFragment extends Fragment{
     ImageView prevImage;
     ImageView nextImage;
 
-
-
     Toast mToast = null;
+
+
+    // userdata 저장 폴더 경로
+    String folderPath;
+
+    // 날짜 변경시 연도까지 변경되면 1, 월만 변경될 경우 0
+    int yearFlag = 0;
+
 
     public int getYear()
     {
@@ -92,6 +98,14 @@ public class thirdFragment extends Fragment{
     {
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.third_view, container, false);
 
+        folderPath = getActivity().getFilesDir() + "/userdata/";
+        File file = new File(folderPath);
+
+        if (!file.exists())
+        {
+            file.mkdirs();
+        }
+
         listView = (ListView)layout.findViewById(R.id.third_view_list);
 
 
@@ -107,8 +121,6 @@ public class thirdFragment extends Fragment{
         period.setText(strCurDate);
 
 
-
-
         // 현재 날짜에서 년, 월 추출
         nowYear = strCurDate.substring(0, 4);
         i_nowYear = Integer.parseInt(nowYear);
@@ -120,40 +132,7 @@ public class thirdFragment extends Fragment{
         Log.d("prev",String.valueOf(sysYear) + " + " + String.valueOf(sysMonth));
 
         // 데이터 불러오기
-        try{
-            BufferedReader br = new BufferedReader(new FileReader(getActivity().getFilesDir() + "userdata.txt"));
-            String readStr = "";
-            String str = null;
-            //StringBuffer data = new StringBuffer();
-            //FileInputStream fis = getActivity().openFileInput ("userdata.txt");
-            //BufferedReader buffer = new BufferedReader(new InputStreamReader(fis));
-            //String str = buffer.readLine();
-            while (((str = br.readLine()) != null))
-            {
-                Log.d("string", str);
-                st = new StringTokenizer(str, "+");
-                strDate = st.nextToken();
-                strContext = st.nextToken();
-
-                listItem = new HashMap<>();
-                listItem.put("date", strDate);;
-                listItem.put("context", strContext);
-
-                Log.d("date", strDate);
-                Log.d("context", strContext);
-                Data.add(listItem);
-
-                //data.append(str + "\n");
-                //str = buffer.readLine();
-            }
-            SimpleAdapter adapter = new SimpleAdapter(getActivity(), Data, android.R.layout.simple_list_item_2, new String[]{"date","context"}, new int[]{android.R.id.text1, android.R.id.text2});
-            listView.setAdapter(adapter);
-            br.close();
-            //buffer.close();
-
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        loadData(String.valueOf(sysYear), String.valueOf(sysMonth));
 
 
         // prev, next 이미지 onClick 이벤트
@@ -166,17 +145,30 @@ public class thirdFragment extends Fragment{
                 {
                     i_nowMonth = 12;
                     i_nowYear --;
-
+                    yearFlag = 1;
                 }
                 else
                 {
                     i_nowMonth --;
+                    yearFlag = 0;
                 }
 
-                nowYear = String.format("%02d", i_nowYear) + "년";
+                nowYear = i_nowYear + "년";
                 nowMonth = String.format("%02d", i_nowMonth) + "월";
                 period.setText(nowYear + " " + nowMonth);
                 Log.d("prev",nowYear + " + " + nowMonth);
+
+                if (yearFlag == 1)
+                {
+                    loadData(nowYear, nowMonth);
+                }
+                else
+                {
+                    renewData(nowYear, nowMonth);
+                }
+
+                yearFlag = 0;
+
             }
         });
 
@@ -204,24 +196,125 @@ public class thirdFragment extends Fragment{
                     {
                         i_nowMonth = 1;
                         i_nowYear ++;
-
+                        yearFlag = 1;
                     }
                     else
                     {
                         i_nowMonth ++;
-
+                        yearFlag = 0;
                     }
 
-                    nowYear = String.format("%02d", i_nowYear) + "년";
+                    nowYear = i_nowYear + "년";
                     nowMonth = String.format("%02d", i_nowMonth) + "월";
                     period.setText(nowYear + " " + nowMonth);
                     Log.d("prev",nowYear + " + " + nowMonth);
+
+                    if (yearFlag == 1)
+                    {
+                        loadData(nowYear, nowMonth);
+                    }
+                    else
+                    {
+                        renewData(nowYear, nowMonth);
+                    }
+
+                    yearFlag = 0;
+
                 }
             }
         });
 
 
         return layout;
+    }
+
+    // 년도는 바뀌지 않고 월만 변경되었을 경우
+    public void renewData (String nowYear, String nowMonth)
+    {
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "userdata.txt"));// nowYear + ".txt"));
+            String readStr = "";
+            String str = null;
+
+            ArrayList<listItem> listData = new ArrayList<>();
+
+            while (((str = br.readLine()) != null))
+            {
+                Log.d("string", str);
+                st = new StringTokenizer(str, "+");
+                strDate = st.nextToken();
+                strContext = st.nextToken();
+
+                strContext = strContext.replace("\\n", "\n");
+
+                listItem newData = new listItem();
+
+                newData.strDate = strDate;
+                newData.strContent = strContext;
+
+                listData.add(newData);
+            }
+            ListAdapter listAdapter = new ListAdapter(listData);
+            listView.setAdapter(listAdapter);
+
+            br.close();
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // 앱 실행시, 혹은 년도와 월 모두 변경되었을 경우
+    public void loadData (String nowYear, String nowMonth)
+    {
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "userdata.txt"));// nowYear + ".txt"));
+            String readStr = "";
+            String str = null;
+            //StringBuffer data = new StringBuffer();
+            //FileInputStream fis = getActivity().openFileInput ("userdata.txt");
+            //BufferedReader buffer = new BufferedReader(new InputStreamReader(fis));
+            //String str = buffer.readLine();
+
+            ArrayList<listItem> listData = new ArrayList<>();
+
+            while (((str = br.readLine()) != null))
+            {
+                Log.d("string", str);
+                st = new StringTokenizer(str, "+");
+                strDate = st.nextToken();
+                strContext = st.nextToken();
+
+                strContext = strContext.replace("\\n", "\n");
+
+                listItem newData = new listItem();
+
+                newData.strDate = strDate;
+                newData.strContent = strContext;
+
+                listData.add(newData);
+
+
+                //listItem = new HashMap<>();
+                //listItem.put("date", strDate);;
+                //listItem.put("context", strContext);
+
+                //Log.d("date", strDate);
+                //Log.d("context", strContext);
+                //Data.add(listItem);
+
+                //data.append(str + "\n");
+                //str = buffer.readLine();
+            }
+            ListAdapter listAdapter = new ListAdapter(listData);
+            listView.setAdapter(listAdapter);
+            //SimpleAdapter adapter = new SimpleAdapter(getActivity(), Data, android.R.layout.simple_list_item_2, new String[]{"date","context"}, new int[]{android.R.id.text1, android.R.id.text2});
+            //listView.setAdapter(adapter);
+            br.close();
+            //buffer.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

@@ -32,11 +32,11 @@ public class writeActivity extends AppCompatActivity {
         setContentView(R.layout.write_view);
 
         Intent intent = getIntent();
-        final String data = intent.getStringExtra("date");
+        final String date = intent.getStringExtra("date");
 
         dateText = findViewById(R.id.write_view_date);
 
-        dateText.setText(data);
+        dateText.setText(date);
 
         backText = findViewById(R.id.write_view_back);
         confirmText = findViewById(R.id.write_view_confirm);
@@ -59,13 +59,14 @@ public class writeActivity extends AppCompatActivity {
             {
                 context = editContext.getText().toString();
                 Intent confirmIntent = new Intent(v.getContext(), MainActivity.class);
-                confirmIntent.putExtra("data", context);
+                //confirmIntent.putExtra("data", context);
 
-                Log.d("date",data);
+                context = context.replace("\n", "\\n");
 
-                try{
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata.txt", true));
-                    bw.write(data + "+" + context + "\n");
+                try {
+
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/userdata.txt", true));
+                    bw.write(date + "+" + context + "\n");
                     bw.close();
                     //FileOutputStream fos = openFileOutput("userdata.txt", Context.MODE_APPEND);
                     Log.d("파일","생성");

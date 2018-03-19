@@ -27,7 +27,6 @@ public class firstFragment extends Fragment{
     {
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.first_view, container, false);
 
-
         return layout;
     }
 }
