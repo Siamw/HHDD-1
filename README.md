@@ -1,7 +1,3 @@
 ## write
 
-#### hwangil
-
-
-#### jiwon
 
