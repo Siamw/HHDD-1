@@ -249,6 +249,8 @@ public class thirdFragment extends Fragment{
 
                 listItem newData = new listItem();
 
+                strDate = strDate.substring(6,21);
+
                 newData.strDate = strDate;
                 newData.strContent = strContext;
 
@@ -287,6 +289,8 @@ public class thirdFragment extends Fragment{
                 strContext = strContext.replace("\\n", "\n");
 
                 listItem newData = new listItem();
+
+                strDate = strDate.substring(6,21);
 
                 newData.strDate = strDate;
                 newData.strContent = strContext;
