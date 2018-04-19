@@ -31,8 +31,7 @@ public class firstFragment extends Fragment{
     }
     @Override
 
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.first_view, container, false);
         MaterialCalendarView materialCalendarView = layout.findViewById(R.id.calendarView);
 
@@ -40,16 +39,20 @@ public class firstFragment extends Fragment{
         materialCalendarView.addDecorators(
                 new SundayDecorator(),
                 new SaturdayDecorator(),
-                new OneDayDecorator());
+                new OneDayDecorator()
+        );
 
 
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
-            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected){
-                //날짜를 눌렀을 때 , 내용 작성칸 / 이미 있는 내용 보여지도록 하는 코드 여기에 작성
+            public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected) {
+
+
+                //날짜를 눌렀을 때 , 이미 있는 내용 보여지도록 하는 코드 여기에 작성
+
+
             }
         });
-
         return layout;
     }
 
