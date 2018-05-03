@@ -1,6 +1,5 @@
 package com.hj.hd.hhdd;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -64,11 +63,12 @@ public class writeActivity extends AppCompatActivity {
                 context = context.replace("\n", "\\n");
 
                 try {
-
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/userdata.txt", true));
+                    String tempDate = date.substring(0,4);
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + tempDate + "년.txt", true));
                     bw.write(date + "+" + context + "\n");
                     bw.close();
                     //FileOutputStream fos = openFileOutput("userdata.txt", Context.MODE_APPEND);
+                    Log.d("check", String.valueOf(getFilesDir()));
                     Log.d("파일","생성");
                     //PrintWriter out  = new PrintWriter(fos);
                     //out.println(data + "+" + context + "\n");
@@ -78,6 +78,7 @@ public class writeActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
+                ((MainActivity)MainActivity.mContext).renewScreen();
 
                 finish();
                 startActivity(confirmIntent);

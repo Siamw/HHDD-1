@@ -1,32 +1,23 @@
 package com.hj.hd.hhdd;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileReader;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.StringTokenizer;
 
 /**
@@ -75,6 +66,9 @@ public class thirdFragment extends Fragment{
     // 날짜 변경시 연도까지 변경되면 1, 월만 변경될 경우 0
     int yearFlag = 0;
 
+    // 다른 액티비티에서 thirdFragment의 메소드 호출을 위해
+
+
 
     public int getYear()
     {
@@ -98,7 +92,10 @@ public class thirdFragment extends Fragment{
     {
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.third_view, container, false);
 
+
+
         folderPath = getActivity().getFilesDir() + "/userdata/";
+        Log.d("loadCheck", folderPath);
         File file = new File(folderPath);
 
         if (!file.exists())
@@ -129,10 +126,10 @@ public class thirdFragment extends Fragment{
 
         sysYear = i_nowYear;
         sysMonth = i_nowMonth;
-        Log.d("prev",String.valueOf(sysYear) + " + " + String.valueOf(sysMonth));
+        Log.d("oncreate",String.valueOf(sysYear) + " + " + String.valueOf(sysMonth));
 
         // 데이터 불러오기
-        loadData(String.valueOf(sysYear), String.valueOf(sysMonth));
+        loadData();
 
 
         // prev, next 이미지 onClick 이벤트
@@ -232,7 +229,7 @@ public class thirdFragment extends Fragment{
     public void renewData (String nowYear, String nowMonth)
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + "userdata.txt"));// nowYear + ".txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + nowYear + ".txt"));
             String readStr = "";
             String str = null;
 
@@ -240,21 +237,27 @@ public class thirdFragment extends Fragment{
 
             while (((str = br.readLine()) != null))
             {
-                Log.d("string", str);
-                st = new StringTokenizer(str, "+");
-                strDate = st.nextToken();
-                strContext = st.nextToken();
+                Log.d("nowMonth",nowMonth);
+                Log.d("substring",str.substring(6,9));
+                if (str.substring(6,9).equals(nowMonth))
+                {
 
-                strContext = strContext.replace("\\n", "\n");
+                    Log.d("string", str);
+                    st = new StringTokenizer(str, "+");
+                    strDate = st.nextToken();
+                    strContext = st.nextToken();
 
-                listItem newData = new listItem();
+                    strContext = strContext.replace("\\n", "\n");
 
-                strDate = strDate.substring(6,21);
+                    listItem newData = new listItem();
 
-                newData.strDate = strDate;
-                newData.strContent = strContext;
+                    strDate = strDate.substring(6, 21);
 
-                listData.add(newData);
+                    newData.strDate = strDate;
+                    newData.strContent = strContext;
+
+                    listData.add(newData);
+                }
             }
             ListAdapter listAdapter = new ListAdapter(listData);
             listView.setAdapter(listAdapter);
@@ -269,7 +272,7 @@ public class thirdFragment extends Fragment{
     public void loadData (String nowYear, String nowMonth)
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + "userdata.txt"));// nowYear + ".txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + nowYear + ".txt"));
             String readStr = "";
             String str = null;
             //StringBuffer data = new StringBuffer();
@@ -281,44 +284,81 @@ public class thirdFragment extends Fragment{
 
             while (((str = br.readLine()) != null))
             {
-                Log.d("string", str);
-                st = new StringTokenizer(str, "+");
-                strDate = st.nextToken();
-                strContext = st.nextToken();
+                if (str.substring(6,9).equals(nowMonth))
+                {
 
-                strContext = strContext.replace("\\n", "\n");
+                    Log.d("string", str);
+                    st = new StringTokenizer(str, "+");
+                    strDate = st.nextToken();
+                    strContext = st.nextToken();
 
-                listItem newData = new listItem();
+                    strContext = strContext.replace("\\n", "\n");
 
-                strDate = strDate.substring(6,21);
+                    listItem newData = new listItem();
 
-                newData.strDate = strDate;
-                newData.strContent = strContext;
+                    strDate = strDate.substring(6, 21);
 
-                listData.add(newData);
+                    newData.strDate = strDate;
+                    newData.strContent = strContext;
 
+                    listData.add(newData);
 
-                //listItem = new HashMap<>();
-                //listItem.put("date", strDate);;
-                //listItem.put("context", strContext);
+                }
 
-                //Log.d("date", strDate);
-                //Log.d("context", strContext);
-                //Data.add(listItem);
-
-                //data.append(str + "\n");
-                //str = buffer.readLine();
             }
             ListAdapter listAdapter = new ListAdapter(listData);
             listView.setAdapter(listAdapter);
-            //SimpleAdapter adapter = new SimpleAdapter(getActivity(), Data, android.R.layout.simple_list_item_2, new String[]{"date","context"}, new int[]{android.R.id.text1, android.R.id.text2});
-            //listView.setAdapter(adapter);
+
             br.close();
-            //buffer.close();
 
         } catch(Exception e) {
             e.printStackTrace();
         }
     }
 
+    public void loadData ()
+    {
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + String.valueOf(sysYear) + "년.txt"));
+            String readStr = "";
+            String str = null;
+
+            ArrayList<listItem> listData = new ArrayList<>();
+
+            String str_sysMonth = String.format("%02d", sysMonth);
+
+            while (((str = br.readLine()) != null))
+            {
+                if (str.substring(6,8).equals(str_sysMonth))
+                {
+                    Log.d("string", str);
+                    st = new StringTokenizer(str, "+");
+                    strDate = st.nextToken();
+                    strContext = st.nextToken();
+
+                    strContext = strContext.replace("\\n", "\n");
+
+                    listItem newData = new listItem();
+
+                    strDate = strDate.substring(6, 21);
+
+                    newData.strDate = strDate;
+                    newData.strContent = strContext;
+
+                    listData.add(newData);
+
+                }
+            }
+            ListAdapter listAdapter = new ListAdapter(listData);
+            listView.setAdapter(listAdapter);
+            br.close();
+
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
 }
+

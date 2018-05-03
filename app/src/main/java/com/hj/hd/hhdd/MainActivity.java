@@ -1,13 +1,14 @@
 package com.hj.hd.hhdd;
 
+import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
-import android.os.Bundle;
-import android.view.ViewDebug;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -26,11 +27,14 @@ public class MainActivity extends AppCompatActivity {
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
 
+    public static Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mContext = this;
 
         vp = (ViewPager)findViewById(R.id.viewp);
         mainLayout = (RelativeLayout)findViewById(R.id.main_view_layout);
@@ -154,4 +158,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    // 일기 작성 후 바로 thirdFragment에 보여주기 위해
+    // 화면 전환 눈속임
+    // 이전 달로 갔다가 다시 원래 달로 돌아오면서 화면 갱신
+    // thirdFragment의 loadData 메소드 사용을 위해
+    public void renewScreen ()
+    {
+        ImageView temp = mainLayout.findViewById(R.id.third_view_prev);
+        ImageView temp_ = mainLayout.findViewById(R.id.third_view_next);
+        temp.performClick();
+        temp_.performClick();
+
+
+    }
 }

@@ -76,7 +76,8 @@ public class IntroActivity extends AppCompatActivity{
                     case 0:
                         introText.setText("오늘 하루 어떻게 보냈나요?");
                         introText.startAnimation(in);
-                        flow ++;
+                        flow = 3;
+                        // flow ++;
                         break;
                     case 1:
                         introText.setText("지오니.\n\n안드로이드 언제해?\n\n얼른 끝내야지.");
@@ -113,6 +114,8 @@ public class IntroActivity extends AppCompatActivity{
     {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
+
+
         finish();
     }
 
