@@ -8,8 +8,6 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 /**
  * Created by hwangil on 2018-03-13.
  */
@@ -81,12 +79,12 @@ public class IntroActivity extends AppCompatActivity{
                         flow ++;
                         break;
                     case 1:
-                        introText.setText("네잎클로버의 이름은 행운이에요.\n\n그런데 그거 알고있어요?\n\n세잎클로버도 이름이 있다는걸.");
+                        introText.setText("지오니.\n\n안드로이드 언제해?\n\n얼른 끝내야지.");
                         introText.startAnimation(in);
                         flow ++;
                         break;
                     case 2:
-                        introText.setText("세잎클로버의 이름은 행복이에요.\n\n혹시 오늘 우리가 네잎클로버라는 행운을 찾으려다 세잎클로버를 지나친건 아닐까요.");
+                        introText.setText("흐읍.....\n\n너무 지체되었자녀~");
                         introText.startAnimation(in);
                         flow ++;
                         break;
