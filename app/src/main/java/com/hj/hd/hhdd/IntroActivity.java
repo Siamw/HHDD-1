@@ -8,6 +8,9 @@ import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.TextView;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+
 /**
  * Created by hwangil on 2018-03-13.
  */
@@ -96,6 +99,18 @@ public class IntroActivity extends AppCompatActivity{
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
+
+                        try
+                        {
+                            BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/introFlag.dat", true));
+                            bw.write("hihi");
+                            bw.close();
+                        }
+                        catch(Exception e)
+                        {
+                            e.printStackTrace();
+                        }
+
                         moveToMain();
                     default:
                         break;
