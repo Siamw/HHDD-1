@@ -2,10 +2,11 @@
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_marginLeft="100dp"
-    android:layout_marginRight="100dp">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="50dp"
+    android:layout_marginRight="50dp">
+
     <LinearLayout
         android:id="@+id/list_dialog_view"
         android:layout_width="match_parent"
@@ -19,16 +20,19 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center"
-            android:text="plz"/>
+            android:textAlignment="center"
+            android:text="안녕하세요"/>
 
         <Button
+            android:id="@+id/dialog_rewrite"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
             android:layout_gravity="center"
-            android:text="내용 고치기"/>
+            android:text="다시 쓰기"/>
 
         <Button
+            android:id="@+id/dialog_delete"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"

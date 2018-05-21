@@ -21,6 +21,10 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
 
     TextView dialogDate;
 
+    Button rewriteButton;
+    Button deleteButton;
+
+
     public ListDialogFragment() {}
     public static ListDialogFragment getInstance (){
         ListDialogFragment e = new ListDialogFragment();
@@ -42,8 +46,44 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
         dialogDate = (TextView) v.findViewById(R.id.dialog_date_text);
         Button mConfirmBtn = (Button) v.findViewById(R.id.btn_confirm);
 
+        String str = getArguments().getString("date");
+        str = str + " 일기";
+
+        dialogDate.setText(str);
 
         mConfirmBtn.setOnClickListener (this);
+
+        rewriteButton = (Button)v.findViewById(R.id.dialog_rewrite);
+        deleteButton = (Button)v.findViewById(R.id.dialog_delete);
+
+        // 해당 일기 수정하기
+        // writeActivity를 불러와야함
+        rewriteButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View v)
+            {
+                //Intent writeIntent = new Intent(v.getContext(), writeActivity.class);
+                // writeIntent.putExtra("date", strNow);
+
+                //startActivity(writeIntent);
+            }
+        });
+
+        // 해당 일기 제거하기
+        // 리스트에서 해당 일기를 제거하고 데이터 파일에서도 제거해야함
+        deleteButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View v)
+            {
+                Bundle sendData = new Bundle();
+                sendData.putString("cc", "ccpcpcppc");
+                thirdFragment f = new thirdFragment();
+
+                f.setArguments(sendData);
+                dismiss();
+            }
+        });
+
 
         return v;
     }

@@ -75,7 +75,7 @@ public class thirdFragment extends Fragment{
 
     ArrayList<listItem> listData = new ArrayList<>();
 
-    ListDialogFragment e = ListDialogFragment.getInstance();
+    ListDialogFragment e;
 
     public int getYear()
     {
@@ -99,7 +99,7 @@ public class thirdFragment extends Fragment{
     {
         RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.third_view, container, false);
 
-
+        e = new ListDialogFragment();
 
         folderPath = getActivity().getFilesDir() + "/userdata/";
         Log.d("loadCheck", folderPath);
@@ -235,18 +235,20 @@ public class thirdFragment extends Fragment{
             public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id)
            {
                // 리스트 아이템에 관한 메뉴 출력 (수정, 제거 등)
-               ListDialogFragment e = new ListDialogFragment();
                //e = ListDialogFragment.getInstance();
-               Log.d("onItemLongClick", "before show");
-               e.show(getActivity().getFragmentManager(), ListDialogFragment.TAG_EVENT_DIALOG);
-               Log.d("onItemLongClick", "after show");
+
                String str = listData.get(position).strDate;
 
-               TextView tv;// = getActivity().findViewById(R.id.dialog_date_text);
-               tv = getActivity().findViewById (R.id.dialog_date_text);
+               Bundle sendData = new Bundle();
+               sendData.putString("date",str);
+
+               e.show(getActivity().getFragmentManager(), ListDialogFragment.TAG_EVENT_DIALOG);
+               e.setArguments(sendData);
+               //TextView tv;// = getActivity().findViewById(R.id.dialog_date_text);
+               //tv = getActivity().findViewById (R.id.dialog_date_text);
 
                //tv.setText(str);
-               Log.d("OnItemLongClickListener", tv.getText().toString());
+               //Log.d("OnItemLongClickListener", tv.getText().toString());
                // e.setDateText(tv, str);   error~~~~~~~~~~~~~~~~~~~~~~~~~~~
                //mToast = Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT);
                //mToast.show();
@@ -255,6 +257,8 @@ public class thirdFragment extends Fragment{
            }
 
         });
+
+
 
 
         return layout;

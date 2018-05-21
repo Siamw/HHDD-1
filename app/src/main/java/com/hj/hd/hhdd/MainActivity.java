@@ -168,7 +168,5 @@ public class MainActivity extends AppCompatActivity {
         ImageView temp_ = mainLayout.findViewById(R.id.third_view_next);
         temp.performClick();
         temp_.performClick();
-
-
     }
 }
