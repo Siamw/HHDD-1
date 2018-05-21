@@ -64,7 +64,7 @@ public class writeActivity extends AppCompatActivity {
 
                 try {
                     String tempDate = date.substring(0,4);
-                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + tempDate + "년.txt", true));
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".dat", true));
                     bw.write(date + "+" + context + "\n");
                     bw.close();
                     //FileOutputStream fos = openFileOutput("userdata.txt", Context.MODE_APPEND);

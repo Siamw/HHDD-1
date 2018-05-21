@@ -56,15 +56,16 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/write_view_date"
         android:layout_above="@+id/write_view_line_down"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginRight="45dp"
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp">
 
         <android.support.design.widget.TextInputEditText
             android:id="@+id/write_view_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="start"
             android:background="@null"/>
     </android.support.design.widget.TextInputLayout >
 

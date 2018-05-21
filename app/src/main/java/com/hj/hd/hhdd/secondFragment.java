@@ -1,17 +1,16 @@
 package com.hj.hd.hhdd;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -102,12 +101,12 @@ public class secondFragment extends Fragment{
                 now = System.currentTimeMillis();
                 date = new Date(now);
 
-                CurDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일 ");
-                CurTimeFormat = new SimpleDateFormat("HH시 mm분 ss초");
+                CurDateFormat = new SimpleDateFormat("yyyy.MM.dd");
+                CurTimeFormat = new SimpleDateFormat("hh:mm a");
 
                 strCurDate = CurDateFormat.format(date);
                 strCurTime = CurTimeFormat.format(date);
-                strNow = strCurDate + strCurTime;
+                strNow = strCurDate + " " + strCurTime;
 
                 mainDateText.setText(strNow);
             }

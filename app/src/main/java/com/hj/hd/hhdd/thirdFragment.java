@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -70,6 +71,12 @@ public class thirdFragment extends Fragment{
 
 
 
+
+
+    ArrayList<listItem> listData = new ArrayList<>();
+
+    ListDialogFragment e = ListDialogFragment.getInstance();
+
     public int getYear()
     {
         return sysYear;
@@ -110,7 +117,7 @@ public class thirdFragment extends Fragment{
         now = System.currentTimeMillis();
         date = new Date(now);
 
-        CurDateFormat = new SimpleDateFormat("yyyy년 MM월");
+        CurDateFormat = new SimpleDateFormat("yyyy.MM");
 
         strCurDate = CurDateFormat.format(date);
 
@@ -121,7 +128,7 @@ public class thirdFragment extends Fragment{
         // 현재 날짜에서 년, 월 추출
         nowYear = strCurDate.substring(0, 4);
         i_nowYear = Integer.parseInt(nowYear);
-        nowMonth = strCurDate.substring(6, 8);
+        nowMonth = strCurDate.substring(5, 7);
         i_nowMonth = Integer.parseInt(nowMonth);
 
         sysYear = i_nowYear;
@@ -150,10 +157,10 @@ public class thirdFragment extends Fragment{
                     yearFlag = 0;
                 }
 
-                nowYear = i_nowYear + "년";
-                nowMonth = String.format("%02d", i_nowMonth) + "월";
-                period.setText(nowYear + " " + nowMonth);
-                Log.d("prev",nowYear + " + " + nowMonth);
+                nowYear = i_nowYear + ".";
+                nowMonth = String.format("%02d", i_nowMonth);
+                period.setText(nowYear + nowMonth);
+                Log.d("prev",nowYear + "+" + nowMonth);
 
                 if (yearFlag == 1)
                 {
@@ -201,9 +208,9 @@ public class thirdFragment extends Fragment{
                         yearFlag = 0;
                     }
 
-                    nowYear = i_nowYear + "년";
-                    nowMonth = String.format("%02d", i_nowMonth) + "월";
-                    period.setText(nowYear + " " + nowMonth);
+                    nowYear = i_nowYear + ".";
+                    nowMonth = String.format("%02d", i_nowMonth);
+                    period.setText(nowYear + nowMonth);
                     Log.d("prev",nowYear + " + " + nowMonth);
 
                     if (yearFlag == 1)
@@ -222,6 +229,34 @@ public class thirdFragment extends Fragment{
         });
 
 
+        // 리스트 아이템 롱클릭 이벤트 리스너
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+           @Override
+            public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id)
+           {
+               // 리스트 아이템에 관한 메뉴 출력 (수정, 제거 등)
+               ListDialogFragment e = new ListDialogFragment();
+               //e = ListDialogFragment.getInstance();
+               Log.d("onItemLongClick", "before show");
+               e.show(getActivity().getFragmentManager(), ListDialogFragment.TAG_EVENT_DIALOG);
+               Log.d("onItemLongClick", "after show");
+               String str = listData.get(position).strDate;
+
+               TextView tv;// = getActivity().findViewById(R.id.dialog_date_text);
+               tv = getActivity().findViewById (R.id.dialog_date_text);
+
+               //tv.setText(str);
+               Log.d("OnItemLongClickListener", tv.getText().toString());
+               // e.setDateText(tv, str);   error~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               //mToast = Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT);
+               //mToast.show();
+
+               return true;
+           }
+
+        });
+
+
         return layout;
     }
 
@@ -229,17 +264,18 @@ public class thirdFragment extends Fragment{
     public void renewData (String nowYear, String nowMonth)
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + nowYear + ".txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + nowYear + "dat"));
             String readStr = "";
             String str = null;
 
-            ArrayList<listItem> listData = new ArrayList<>();
+
+            listData.clear();
 
             while (((str = br.readLine()) != null))
             {
                 Log.d("nowMonth",nowMonth);
-                Log.d("substring",str.substring(6,9));
-                if (str.substring(6,9).equals(nowMonth))
+                Log.d("substring",str.substring(5,7));
+                if (str.substring(5,7).equals(nowMonth))
                 {
 
                     Log.d("string", str);
@@ -251,7 +287,7 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(6, 21);
+                    strDate = strDate.substring(5, 10);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
@@ -272,7 +308,7 @@ public class thirdFragment extends Fragment{
     public void loadData (String nowYear, String nowMonth)
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + nowYear + ".txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + nowYear + "dat"));
             String readStr = "";
             String str = null;
             //StringBuffer data = new StringBuffer();
@@ -280,11 +316,12 @@ public class thirdFragment extends Fragment{
             //BufferedReader buffer = new BufferedReader(new InputStreamReader(fis));
             //String str = buffer.readLine();
 
-            ArrayList<listItem> listData = new ArrayList<>();
+            // ArrayList<listItem> listData = new ArrayList<>();
+            listData.clear();
 
             while (((str = br.readLine()) != null))
             {
-                if (str.substring(6,9).equals(nowMonth))
+                if (str.substring(5,7).equals(nowMonth))
                 {
 
                     Log.d("string", str);
@@ -296,7 +333,7 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(6, 21);
+                    strDate = strDate.substring(5, 10);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
@@ -306,6 +343,7 @@ public class thirdFragment extends Fragment{
                 }
 
             }
+
             ListAdapter listAdapter = new ListAdapter(listData);
             listView.setAdapter(listAdapter);
 
@@ -319,17 +357,17 @@ public class thirdFragment extends Fragment{
     public void loadData ()
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + String.valueOf(sysYear) + "년.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + String.valueOf(sysYear) + ".dat"));
             String readStr = "";
             String str = null;
 
-            ArrayList<listItem> listData = new ArrayList<>();
+            listData.clear();
 
             String str_sysMonth = String.format("%02d", sysMonth);
 
             while (((str = br.readLine()) != null))
             {
-                if (str.substring(6,8).equals(str_sysMonth))
+                if (str.substring(5,7).equals(str_sysMonth))
                 {
                     Log.d("string", str);
                     st = new StringTokenizer(str, "+");
@@ -340,7 +378,7 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(6, 21);
+                    strDate = strDate.substring(5, 10);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
