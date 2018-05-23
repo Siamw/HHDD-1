@@ -1,7 +1,8 @@
 package com.hj.hd.hhdd;
 
-import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +25,7 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
     Button rewriteButton;
     Button deleteButton;
 
+    String sendData[] = {"0", "0"};
 
     public ListDialogFragment() {}
     public static ListDialogFragment getInstance (){
@@ -46,10 +48,12 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
         dialogDate = (TextView) v.findViewById(R.id.dialog_date_text);
         Button mConfirmBtn = (Button) v.findViewById(R.id.btn_confirm);
 
-        String str = getArguments().getString("date");
-        str = str + " 일기";
+        String str[] = getArguments().getStringArray("longClick");
 
-        dialogDate.setText(str);
+        str[0] = str[0] + " 일기";
+        int pos = Integer.valueOf(str[1]);
+        dialogDate.setText(str[0]);
+        sendData[1] = String.valueOf(pos);
 
         mConfirmBtn.setOnClickListener (this);
 
@@ -66,6 +70,14 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
                 // writeIntent.putExtra("date", strNow);
 
                 //startActivity(writeIntent);
+                sendData[0] = "1";
+
+                Intent data = new Intent(v.getContext(), MainActivity.class);
+                data.putExtra("dialogData", sendData);
+                getTargetFragment().onActivityResult(0, 0, data);
+
+
+                dismiss();
             }
         });
 
@@ -75,11 +87,19 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
             @Override
             public void onClick (View v)
             {
-                Bundle sendData = new Bundle();
-                sendData.putString("cc", "ccpcpcppc");
-                thirdFragment f = new thirdFragment();
+                //Bundle sendData = new Bundle();
+                //sendData.putString("cc", "ccpcpcppc");
+                //thirdFragment f = new thirdFragment();
 
-                f.setArguments(sendData);
+                //f.setArguments(sendData);
+
+                sendData[0] = "2";
+
+                Intent data = new Intent(v.getContext(), MainActivity.class);
+                data.putExtra("dialogData", sendData);
+                getTargetFragment().onActivityResult(0, 0, data);
+
+
                 dismiss();
             }
         });

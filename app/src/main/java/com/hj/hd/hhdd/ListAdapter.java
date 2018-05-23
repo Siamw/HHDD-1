@@ -1,7 +1,6 @@
 package com.hj.hd.hhdd;
 
 import android.content.Context;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,6 +40,12 @@ public class ListAdapter extends BaseAdapter {
     public long getItemId (int position)
     {
         return 0;
+    }
+
+    public void setItemList(ArrayList<listItem> list)
+    {
+        listData = list;
+        listCount = listData.size();
     }
 
     @Override

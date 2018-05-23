@@ -1,5 +1,6 @@
 package com.hj.hd.hhdd;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -69,7 +70,7 @@ public class thirdFragment extends Fragment{
 
     // 다른 액티비티에서 thirdFragment의 메소드 호출을 위해
 
-
+    ListAdapter listAdapter;
 
 
 
@@ -237,12 +238,19 @@ public class thirdFragment extends Fragment{
                // 리스트 아이템에 관한 메뉴 출력 (수정, 제거 등)
                //e = ListDialogFragment.getInstance();
 
+               String longClickData[] = {null, null};
+
                String str = listData.get(position).strDate;
+
+               longClickData[0] = str;
+               longClickData[1] = String.valueOf(position);
 
                Bundle sendData = new Bundle();
                sendData.putString("date",str);
-
-               e.show(getActivity().getFragmentManager(), ListDialogFragment.TAG_EVENT_DIALOG);
+               sendData.putStringArray("longClick", longClickData);
+               e.setTargetFragment(thirdFragment.this, 0);
+               e.show(getFragmentManager(), "EVENT_DIALOG");
+               //e.show(getActivity().getFragmentManager(), ListDialogFragment.TAG_EVENT_DIALOG);
                e.setArguments(sendData);
                //TextView tv;// = getActivity().findViewById(R.id.dialog_date_text);
                //tv = getActivity().findViewById (R.id.dialog_date_text);
@@ -264,25 +272,65 @@ public class thirdFragment extends Fragment{
         return layout;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        String flag[] = data.getStringArrayExtra("dialogData");
+        int pos = Integer.valueOf(flag[1]);
+        // 수정했을 경우
+        if (flag[0] == "1")
+        {
+            Toast.makeText(getActivity(), flag[1], Toast.LENGTH_SHORT).show();
+
+            String modify[] = {null, null, null};
+            modify[0] = "M";
+            modify[1] = listData.get(pos).strDate;
+            modify[2] = listData.get(pos).strContent;
+
+            Intent modifyWriteActivity = new Intent(getContext(), writeActivity.class);
+            modifyWriteActivity.putExtra("write",modify);
+            startActivity(modifyWriteActivity);
+
+
+
+            listAdapter.setItemList(listData);
+            listAdapter.notifyDataSetChanged();
+        }
+
+        // 제거했을 경우
+        else if (flag[0] == "2")
+        {
+            Toast.makeText(getActivity(), flag[1], Toast.LENGTH_SHORT).show();
+            listData.remove(pos);
+
+            listAdapter.setItemList(listData);
+            listAdapter.notifyDataSetChanged();
+
+        }
+
+        // 아무것도 아닐 경우
+        else
+        {
+
+        }
+
+    }
+
     // 년도는 바뀌지 않고 월만 변경되었을 경우
     public void renewData (String nowYear, String nowMonth)
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + nowYear + "dat"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + nowYear + "txt"));
             String readStr = "";
             String str = null;
-
 
             listData.clear();
 
             while (((str = br.readLine()) != null))
             {
-                Log.d("nowMonth",nowMonth);
-                Log.d("substring",str.substring(5,7));
                 if (str.substring(5,7).equals(nowMonth))
                 {
-
-                    Log.d("string", str);
                     st = new StringTokenizer(str, "+");
                     strDate = st.nextToken();
                     strContext = st.nextToken();
@@ -291,7 +339,7 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(5, 10);
+                    strDate = strDate.substring(0, 19);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
@@ -299,7 +347,7 @@ public class thirdFragment extends Fragment{
                     listData.add(newData);
                 }
             }
-            ListAdapter listAdapter = new ListAdapter(listData);
+            listAdapter = new ListAdapter(listData);
             listView.setAdapter(listAdapter);
 
             br.close();
@@ -312,23 +360,16 @@ public class thirdFragment extends Fragment{
     public void loadData (String nowYear, String nowMonth)
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + nowYear + "dat"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + nowYear + "txt"));
             String readStr = "";
             String str = null;
-            //StringBuffer data = new StringBuffer();
-            //FileInputStream fis = getActivity().openFileInput ("userdata.txt");
-            //BufferedReader buffer = new BufferedReader(new InputStreamReader(fis));
-            //String str = buffer.readLine();
 
-            // ArrayList<listItem> listData = new ArrayList<>();
             listData.clear();
 
             while (((str = br.readLine()) != null))
             {
                 if (str.substring(5,7).equals(nowMonth))
                 {
-
-                    Log.d("string", str);
                     st = new StringTokenizer(str, "+");
                     strDate = st.nextToken();
                     strContext = st.nextToken();
@@ -337,18 +378,15 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(5, 10);
+                    strDate = strDate.substring(0, 19);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
 
                     listData.add(newData);
-
                 }
-
             }
-
-            ListAdapter listAdapter = new ListAdapter(listData);
+            listAdapter = new ListAdapter(listData);
             listView.setAdapter(listAdapter);
 
             br.close();
@@ -361,7 +399,7 @@ public class thirdFragment extends Fragment{
     public void loadData ()
     {
         try{
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + String.valueOf(sysYear) + ".dat"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf" + String.valueOf(sysYear) + ".txt"));
             String readStr = "";
             String str = null;
 
@@ -373,7 +411,6 @@ public class thirdFragment extends Fragment{
             {
                 if (str.substring(5,7).equals(str_sysMonth))
                 {
-                    Log.d("string", str);
                     st = new StringTokenizer(str, "+");
                     strDate = st.nextToken();
                     strContext = st.nextToken();
@@ -382,7 +419,7 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(5, 10);
+                    strDate = strDate.substring(0, 19);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
@@ -391,7 +428,7 @@ public class thirdFragment extends Fragment{
 
                 }
             }
-            ListAdapter listAdapter = new ListAdapter(listData);
+            listAdapter = new ListAdapter(listData);
             listView.setAdapter(listAdapter);
             br.close();
 
@@ -399,8 +436,5 @@ public class thirdFragment extends Fragment{
             e.printStackTrace();
         }
     }
-
-
-
 }
 

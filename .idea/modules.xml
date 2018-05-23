@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/HHDD.iml" filepath="$PROJECT_DIR$/HHDD.iml" />
-      <module fileurl="file://C:\Users\hwangil\AndroidStudioProjects\HHDD\HHDD-1.iml" filepath="C:\Users\hwangil\AndroidStudioProjects\HHDD\HHDD-1.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/titanicMod/titanicMod.iml" filepath="$PROJECT_DIR$/titanicMod/titanicMod.iml" />
     </modules>
   </component>
 </project>

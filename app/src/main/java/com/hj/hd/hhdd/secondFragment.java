@@ -1,18 +1,26 @@
 package com.hj.hd.hhdd;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -50,6 +58,9 @@ public class secondFragment extends Fragment{
     TextView writeText;
 
     ImageView treeImage;
+
+    //메인메뉴 이미지버튼
+    ImageView menuImage;
 
     int wiseArySize = 0;
     String wiseSaying[] = {
@@ -120,21 +131,20 @@ public class secondFragment extends Fragment{
         wiseArySize = wiseSaying.length;
 
         printWiseText();
-
         timeMethod();
         changeWiseText();
 
         writeText = (TextView)layout.findViewById(R.id.second_view_write);
-        writeText.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick (View v)
-            {
-                Intent writeIntent = new Intent(v.getContext(), writeActivity.class);
-                writeIntent.putExtra("date", strNow);
-                //getActivity().finish();
-                startActivity(writeIntent);
-            }
-        });
+//        writeText.setOnClickListener(new View.OnClickListener(){
+//            @Override
+//            public void onClick (View v)
+//            {
+//                Intent writeIntent = new Intent(v.getContext(), writeActivity.class);
+//                writeIntent.putExtra("date", strNow);
+//                //getActivity().finish();
+//                startActivity(writeIntent);
+//            }
+//        });
 
 
 
@@ -143,16 +153,122 @@ public class secondFragment extends Fragment{
             @Override
             public void onClick (View v)
             {
+                String writeStr[] = {null, null};
+                writeStr[0] = "W";
+                writeStr[1] = strNow;
+
                 Intent writeIntent = new Intent(v.getContext(), writeActivity.class);
-                writeIntent.putExtra("date", strNow);
+
+                writeIntent.putExtra("write", writeStr);
                 //getActivity().finish();
                 startActivity(writeIntent);
             }
         });
 
+        menuImage = (ImageView)layout.findViewById(R.id.second_view_menu);
+
+        menuImage.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick (View v)
+            {
+                PopupMenu pop = new PopupMenu(v.getContext(),v);
+                pop.getMenuInflater().inflate(R.menu.menu_main, pop.getMenu());
+
+                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
+                    @Override
+                    public boolean onMenuItemClick (MenuItem item)
+                    {
+                        if (item.getTitle().equals("인트로"))
+                        {
+                            Log.d("intro","check");
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                            alertDialogBuilder.setTitle("인트로 다시보기");
+
+                            // AlertDialog 셋팅
+                            alertDialogBuilder
+                                    .setMessage("인트로를 다시 보시겠습니까?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("넵",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog, int id) {
+                                                    // 인트로 파일 제거
+                                                    String flagPath = getActivity().getFilesDir() + "/userdata/introFlag.dat";
+                                                    File files = new File(flagPath);
+                                                    files.delete();
+                                                }
+                                            })
+                                    .setNegativeButton("아녕",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog, int id) {
+                                                    // 다이얼로그를 취소한다
+                                                    dialog.cancel();
+                                                }
+                                            });
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+
+                            // 다이얼로그 보여주기
+                            alertDialog.show();
+
+
+                        }
+                        else if (item.getTitle().equals("도움말"))
+                        {
+                            Toast.makeText(getActivity(),"도움말입니다", Toast.LENGTH_SHORT).show();
+                        }
+                        else
+                        {// 모든 데이터 초기화
+                            AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                            alertDialogBuilder.setTitle("데이터 초기화");
+
+                            // AlertDialog 셋팅
+                            alertDialogBuilder
+                                    .setMessage("모든 데이터를 초기화하시겠습니까?")
+                                    .setCancelable(false)
+                                    .setPositiveButton("넵",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog, int id) {
+                                                    // 모든 데이터 제거
+                                                    String flagPath = getActivity().getFilesDir() + "/userdata";
+                                                    File files = new File(flagPath);
+                                                    files.delete();
+                                                    Runtime runtime = Runtime.getRuntime();
+                                                    String cmd = "rm -R " + flagPath;
+                                                    try {
+                                                        runtime.exec(cmd);
+                                                    } catch (IOException e) {
+                                                        e.printStackTrace();
+                                                    }
+                                                }
+                                            })
+                                    .setNegativeButton("아녕",
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(
+                                                        DialogInterface dialog, int id) {
+                                                    // 다이얼로그를 취소한다
+                                                    dialog.cancel();
+                                                }
+                                            });
+                            AlertDialog alertDialog = alertDialogBuilder.create();
+
+                            // 다이얼로그 보여주기
+                            alertDialog.show();
+                        }
+                        return false;
+                    }
+                });
+                pop.show();
+            }
+        });
 
         return layout;
     }
+
+
+
+
     public void timeMethod()
     {
         final Handler handler  = new Handler()
