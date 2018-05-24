@@ -53,7 +53,6 @@ public class writeActivity extends AppCompatActivity {
         // intentData[1] = intentData[1].replace("2018", "2017");
         // 이런 식으로 변경하면 됩니다.
         // 첫번재 파라미터가 타겟, 두번째 파라미터가 대체할 문자열 입니더.
-
         if (intentData[0].equals("W"))
         {// 새로 작성
             dateText.setText(intentData[1]);
