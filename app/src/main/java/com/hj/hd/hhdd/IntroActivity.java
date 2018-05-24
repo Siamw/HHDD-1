@@ -77,18 +77,18 @@ public class IntroActivity extends AppCompatActivity{
                 switch (flow)
                 {
                     case 0:
-                        introText.setText("오늘 하루 어떻게 보냈나요?");
+                        introText.setText("아령하세여~?~");
                         introText.startAnimation(in);
                         flow = 3;
                         // flow ++;
                         break;
                     case 1:
-                        introText.setText("지오니.\n\n안드로이드 언제해?\n\n얼른 끝내야지.");
+                        introText.setText("지오니.\n\n안드로이드 언제해?");
                         introText.startAnimation(in);
                         flow ++;
                         break;
                     case 2:
-                        introText.setText("흐읍.....\n\n너무 지체되었자녀~");
+                        introText.setText("스겜 부탁\n\n찡긋>_-");
                         introText.startAnimation(in);
                         flow ++;
                         break;
