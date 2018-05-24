@@ -129,6 +129,11 @@ public class firstFragment extends Fragment {
 
         Log.d("now year and month  :  ", String.valueOf(sysYear) + " , " + String.valueOf(sysMonth));
 
+
+
+        //setOnMonthChangedListener
+
+
         // 데이터 불러오기
 
         try {
@@ -159,17 +164,7 @@ public class firstFragment extends Fragment {
         }
 
         String[] result = dateData;
-                //{"2018,04,10", "2018,04,13", "2018,04,15", "2018,04,20", "2018,05,06"};// result에 일기를 쓴 날이 들어가도록 해야함
 
-
-       // Log.d("dates~~~~~~",Integer.toString(dateData.length));                                                //마지막날짜 출력 안됨 ㅠㅠ
-/*
-        for(int i=0;i<32;i++)
-        {
-            if(dateData[i]!=null)
-            {Log.d("dates~~~~~~"+i+"~~~~~~~~",dateData[i]);}
-        }
-*/
        new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
