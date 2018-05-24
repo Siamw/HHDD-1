@@ -44,6 +44,16 @@ public class writeActivity extends AppCompatActivity {
         editContext = findViewById(R.id.write_view_edit);
 
 
+        // intentData[1]이 2018.05.24 12:11 오후 이런 식으로 되어있걸랑여?
+        // 그러니까 4월달에 입력하고 프면
+        // intentData[1] = intentData[1].replace("05", "04");
+        // 위에 코드 바로 여기에다가 추가하면 4월달에 입력됩니더.
+        // 만약 4월이 아닌 2월을 하고프면 "04"를 "02"로 바꾸면 됩니다.
+        // 만일 년도를 변경하고싶다. 그러면
+        // intentData[1] = intentData[1].replace("2018", "2017");
+        // 이런 식으로 변경하면 됩니다.
+        // 첫번재 파라미터가 타겟, 두번째 파라미터가 대체할 문자열 입니더.
+
         if (intentData[0].equals("W"))
         {// 새로 작성
             dateText.setText(intentData[1]);
@@ -84,9 +94,8 @@ public class writeActivity extends AppCompatActivity {
                     {
                         BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt", true));
                         bw.write(intentData[1] + "+" + context + "\n");
+
                         bw.close();
-
-
                     }
                     else if (intentData[0].equals("M"))
                     {
