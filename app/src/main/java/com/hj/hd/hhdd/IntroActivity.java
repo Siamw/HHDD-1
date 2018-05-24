@@ -80,7 +80,7 @@ public class IntroActivity extends AppCompatActivity{
                         introText.setText("아령하세여~?~");
                         introText.startAnimation(in);
                         flow = 3;
-                        // flow ++;
+                        flow ++;
                         break;
                     case 1:
                         introText.setText("지오니.\n\n안드로이드 언제해?");
