@@ -93,9 +93,8 @@ public class writeActivity extends AppCompatActivity {
                     {
                         BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt", true));
                         bw.write(intentData[1] + "+" + context + "\n");
+
                         bw.close();
-
-
                     }
                     else if (intentData[0].equals("M"))
                     {
