@@ -116,14 +116,15 @@ public class firstFragment extends Fragment {
         now = System.currentTimeMillis();
         date = new Date(now);
 
-        CurDateFormat = new SimpleDateFormat("yyyy년 MM월");
+        CurDateFormat = new SimpleDateFormat("yyyy.MM");
 
         strCurDate = CurDateFormat.format(date);
+        Log.d("lalalalalalaalalalalal",strCurDate);
 
         //현재 날짜에서 년, 월 추출
         nowYear = strCurDate.substring(0, 4);
         i_nowYear = Integer.parseInt(nowYear);
-        nowMonth = strCurDate.substring(6, 8);
+        nowMonth = strCurDate.substring(5, 7);
         i_nowMonth = Integer.parseInt(nowMonth);
 
         sysYear = i_nowYear;
@@ -140,7 +141,7 @@ public class firstFragment extends Fragment {
         // 데이터 불러오기
 
         try {
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + String.valueOf(sysYear) + "년.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath +"dataOf" + String.valueOf(sysYear) + ".txt"));
             String readStr = "";
             String str = null;
             int num = -1;
@@ -150,12 +151,12 @@ public class firstFragment extends Fragment {
             String str_sysMonth = String.format("%02d", sysMonth);
 
             while (((str = br.readLine()) != null)) {
-                if (str.substring(6, 8).equals(str_sysMonth)) {
+                if (str.substring(5, 7).equals(str_sysMonth)) {
                     num++;
                     dataNum++;//data의 개수
                     int length=dateData.length;
-                    dateData[num]= str.substring(0,4)+','+str.substring(6,8)+','+str.substring(10,12);
-                    Log.d("데이터어어어어어어엉", str.substring(0,4)+','+str.substring(6,8)+','+str.substring(10,12));
+                    dateData[num]= str.substring(0,4)+','+str.substring(5,7)+','+str.substring(8,10);
+                    Log.d("데이터어어어어어어엉", str.substring(0,4)+','+str.substring(5,7)+','+str.substring(8,10));
 
                 }
             }
@@ -401,7 +402,7 @@ public class firstFragment extends Fragment {
 
     public void loadData(String[] dateData) {
         try {
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + String.valueOf(sysYear) + "년.txt"));
+            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf"+String.valueOf(sysYear) + ".txt"));
             String readStr = "";
             String str = null;
             String nowDate = null;
@@ -411,10 +412,10 @@ public class firstFragment extends Fragment {
             String str_sysMonth = String.format("%02d", sysMonth);
 
             while (((str = br.readLine()) != null)) {
-                if (str.substring(6, 8).equals(str_sysMonth)) {
-                    nowDate = str.substring(10,12);
+                if (str.substring(5, 7).equals(str_sysMonth)) {
+                    nowDate = str.substring(8,10);
                     int length=dateData.length;
-                    dateData[length]= str.substring(0,4)+","+str.substring(6,8)+","+str.substring(10,12);
+                    dateData[length]= str.substring(0,4)+","+str.substring(5,7)+","+str.substring(8,10);
                     //Log.d("string", str + nowDate);
 
                 }
