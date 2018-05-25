@@ -15,8 +15,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -30,12 +32,11 @@ public class thirdFragment extends Fragment{
 
     // 리스트뷰 관련
     private ListView listView;
-    //private ArrayList<HashMap<String, String>> Data = new ArrayList<HashMap<String, String>>();
-    //private HashMap<String, String> listItem;
+
     StringTokenizer st;
     String strDate;
     String strContext;
-
+    String printDate;
 
     // 날짜 텍스트뷰 관련
     long now;
@@ -125,7 +126,6 @@ public class thirdFragment extends Fragment{
         period= (TextView)layout.findViewById(R.id.third_view_period);
         period.setText(strCurDate);
 
-
         // 현재 날짜에서 년, 월 추출
         nowYear = strCurDate.substring(0, 4);
         i_nowYear = Integer.parseInt(nowYear);
@@ -134,11 +134,9 @@ public class thirdFragment extends Fragment{
 
         sysYear = i_nowYear;
         sysMonth = i_nowMonth;
-        Log.d("oncreate",String.valueOf(sysYear) + " + " + String.valueOf(sysMonth));
 
         // 데이터 불러오기
         loadData();
-
 
         // prev, next 이미지 onClick 이벤트
         prevImage = (ImageView)layout.findViewById(R.id.third_view_prev);
@@ -171,9 +169,7 @@ public class thirdFragment extends Fragment{
                 {
                     renewData(nowYear, nowMonth);
                 }
-
                 yearFlag = 0;
-
             }
         });
 
@@ -222,9 +218,7 @@ public class thirdFragment extends Fragment{
                     {
                         renewData(nowYear, nowMonth);
                     }
-
                     yearFlag = 0;
-
                 }
             }
         });
@@ -236,10 +230,7 @@ public class thirdFragment extends Fragment{
             public boolean onItemLongClick (AdapterView<?> parent, View view, int position, long id)
            {
                // 리스트 아이템에 관한 메뉴 출력 (수정, 제거 등)
-               //e = ListDialogFragment.getInstance();
-
                String longClickData[] = {null, null};
-
                String str = listData.get(position).strDate;
 
                longClickData[0] = str;
@@ -249,17 +240,9 @@ public class thirdFragment extends Fragment{
                sendData.putString("date",str);
                sendData.putStringArray("longClick", longClickData);
                e.setTargetFragment(thirdFragment.this, 0);
-               e.show(getFragmentManager(), "EVENT_DIALOG");
-               //e.show(getActivity().getFragmentManager(), ListDialogFragment.TAG_EVENT_DIALOG);
-               e.setArguments(sendData);
-               //TextView tv;// = getActivity().findViewById(R.id.dialog_date_text);
-               //tv = getActivity().findViewById (R.id.dialog_date_text);
 
-               //tv.setText(str);
-               //Log.d("OnItemLongClickListener", tv.getText().toString());
-               // e.setDateText(tv, str);   error~~~~~~~~~~~~~~~~~~~~~~~~~~~
-               //mToast = Toast.makeText(getActivity(), str, Toast.LENGTH_SHORT);
-               //mToast.show();
+               e.show(getFragmentManager(), "EVENT_DIALOG");
+               e.setArguments(sendData);
 
                return true;
            }
@@ -292,8 +275,6 @@ public class thirdFragment extends Fragment{
             modifyWriteActivity.putExtra("write",modify);
             startActivity(modifyWriteActivity);
 
-
-
             listAdapter.setItemList(listData);
             listAdapter.notifyDataSetChanged();
         }
@@ -302,19 +283,53 @@ public class thirdFragment extends Fragment{
         else if (flag[0] == "2")
         {
             Toast.makeText(getActivity(), flag[1], Toast.LENGTH_SHORT).show();
+            saveDataAfterRemove(pos);
             listData.remove(pos);
 
             listAdapter.setItemList(listData);
             listAdapter.notifyDataSetChanged();
-
         }
 
         // 아무것도 아닐 경우
         else
         {
-
         }
 
+    }
+
+    public void saveDataAfterRemove (int pos)
+    {// 리스트에서 아이템을 제거한 후 데이터를 갱신하기 위한 함수
+        try {
+            String strDate;
+            String strYear;
+            strDate = listData.get(pos).strDate;
+            strYear = strDate.substring(0,4);
+            BufferedReader br = new BufferedReader(new FileReader(getActivity().getFilesDir() + "/userdata/" + "dataOf" + strYear + ".txt"));
+
+            String str;
+            String dummy = "";
+
+            while (((str = br.readLine()) != null))
+            {
+                if (str.substring(0,22).equals(strDate))
+                {// 제거한 아이템
+                }
+                else
+                {// 그 외의 아이템
+                    dummy = dummy + str + "\n";
+                }
+            }
+            br.close();
+
+            BufferedWriter bw = new BufferedWriter(new FileWriter(getActivity().getFilesDir() + "/userdata/" + "dataOf" + strYear + ".txt"));
+            dummy = dummy;
+            bw.write(dummy);
+            bw.close();
+
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
     }
 
     // 년도는 바뀌지 않고 월만 변경되었을 경우
@@ -339,10 +354,12 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(0, 19);
+                    strDate = strDate.substring(0, 22);
+                    printDate = strDate.substring(0,10);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
+                    newData.printDate = printDate;
 
                     listData.add(newData);
                 }
@@ -378,10 +395,12 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(0, 19);
+                    strDate = strDate.substring(0, 22);
+                    printDate = strDate.substring(0,10);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
+                    newData.printDate = printDate;
 
                     listData.add(newData);
                 }
@@ -419,13 +438,14 @@ public class thirdFragment extends Fragment{
 
                     listItem newData = new listItem();
 
-                    strDate = strDate.substring(0, 19);
+                    strDate = strDate.substring(0, 22);
+                    printDate = strDate.substring(0,10);
 
                     newData.strDate = strDate;
                     newData.strContent = strContext;
+                    newData.printDate = printDate;
 
                     listData.add(newData);
-
                 }
             }
             listAdapter = new ListAdapter(listData);

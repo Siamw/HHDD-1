@@ -79,7 +79,6 @@ public class IntroActivity extends AppCompatActivity{
                     case 0:
                         introText.setText("아령하세여~?~");
                         introText.startAnimation(in);
-//                        flow = 3;
                         flow ++;
                         break;
                     case 1:
@@ -129,7 +128,6 @@ public class IntroActivity extends AppCompatActivity{
     {
         Intent mainIntent = new Intent(this, MainActivity.class);
         startActivity(mainIntent);
-
 
         finish();
     }

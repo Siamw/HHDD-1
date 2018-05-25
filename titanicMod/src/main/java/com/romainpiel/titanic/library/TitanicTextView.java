@@ -10,7 +10,6 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.TextView;
-import android.support.v7.app.AppCompatActivity;
 
 /**
  * Titanic
@@ -132,7 +131,7 @@ public class TitanicTextView extends TextView {
     private void createShader() {
 
         if (wave == null) {
-            wave = getResources().getDrawable(R.drawable.wave);
+            wave = getResources().getDrawable(R.drawable.wave_red);
         }
 
         int waveW = wave.getIntrinsicWidth();

@@ -64,7 +64,7 @@ public class ListAdapter extends BaseAdapter {
         TextView textDate = (TextView)convertView.findViewById(R.id.listview_item_date);
         TextView textContent = (TextView)convertView.findViewById(R.id.listview_item_content);
 
-        textDate.setText(listData.get(position).strDate);
+        textDate.setText(listData.get(position).printDate);
         textContent.setText(listData.get(position).strContent);
 
         return convertView;

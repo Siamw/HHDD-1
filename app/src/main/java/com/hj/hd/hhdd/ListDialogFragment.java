@@ -66,16 +66,11 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
             @Override
             public void onClick (View v)
             {
-                //Intent writeIntent = new Intent(v.getContext(), writeActivity.class);
-                // writeIntent.putExtra("date", strNow);
-
-                //startActivity(writeIntent);
                 sendData[0] = "1";
 
                 Intent data = new Intent(v.getContext(), MainActivity.class);
                 data.putExtra("dialogData", sendData);
                 getTargetFragment().onActivityResult(0, 0, data);
-
 
                 dismiss();
             }
@@ -87,18 +82,11 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
             @Override
             public void onClick (View v)
             {
-                //Bundle sendData = new Bundle();
-                //sendData.putString("cc", "ccpcpcppc");
-                //thirdFragment f = new thirdFragment();
-
-                //f.setArguments(sendData);
-
                 sendData[0] = "2";
 
                 Intent data = new Intent(v.getContext(), MainActivity.class);
                 data.putExtra("dialogData", sendData);
                 getTargetFragment().onActivityResult(0, 0, data);
-
 
                 dismiss();
             }
@@ -111,11 +99,5 @@ public class ListDialogFragment extends DialogFragment implements View.OnClickLi
     public void onClick (View v)
     {
         dismiss();
-    }
-    public void setDateText (TextView tv, String date_str)
-    {
-        Log.d("setDateText", date_str);
-
-        tv.setText(date_str);
     }
 }
