@@ -7,4 +7,5 @@ package com.hj.hd.hhdd;
 public class listItem {
     public String strDate;
     public String strContent;
+    public String printDate;
 }

@@ -43,9 +43,11 @@ public class secondFragment extends Fragment{
     TextView mainDateText;
     SimpleDateFormat CurDateFormat;
     SimpleDateFormat CurTimeFormat;
+    SimpleDateFormat printDateTiem;
     String strCurDate;
     String strCurTime;
     String strNow;
+    String printNow;
 
     // total 텍스트 관련
     String strTotalText;
@@ -262,11 +264,8 @@ public class secondFragment extends Fragment{
                 pop.show();
             }
         });
-
         return layout;
     }
-
-
 
 
     public void timeMethod()
@@ -280,13 +279,15 @@ public class secondFragment extends Fragment{
                 date = new Date(now);
 
                 CurDateFormat = new SimpleDateFormat("yyyy.MM.dd");
-                CurTimeFormat = new SimpleDateFormat("hh:mm a");
+                CurTimeFormat = new SimpleDateFormat("hh:mm:ss a");
 
                 strCurDate = CurDateFormat.format(date);
                 strCurTime = CurTimeFormat.format(date);
                 strNow = strCurDate + " " + strCurTime;
 
-                mainDateText.setText(strNow);
+                printDateTiem = new SimpleDateFormat("yyyy.MM.dd hh:mm a");
+                printNow = printDateTiem.format(now);
+                mainDateText.setText(printNow);
             }
         };
 

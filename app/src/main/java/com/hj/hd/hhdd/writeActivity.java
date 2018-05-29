@@ -59,7 +59,6 @@ public class writeActivity extends AppCompatActivity {
         }
         else if (intentData[0].equals("M"))
         {// 기존 내용 수정
-            Log.d("elsif", intentData[0]);
             dateText.setText(intentData[1]);
             editContext.setText(intentData[2]);
             editContext.setSelection(editContext.length());
@@ -105,7 +104,7 @@ public class writeActivity extends AppCompatActivity {
 
                         while (((str = br.readLine()) != null))
                         {
-                            if (str.substring(0,19).equals(intentData[1]))
+                            if (str.substring(0,22).equals(intentData[1]))
                             {
                                 str = intentData[1] + "+" + context + "\n";
                                 dummy = dummy + str;

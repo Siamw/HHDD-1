@@ -39,7 +39,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        app:srcCompat="@drawable/grown_tree" />
+        app:srcCompat="@drawable/grown_tree"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
 
     <TextView
         android:id="@+id/second_view_write"
@@ -69,7 +71,9 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="75dp"
         android:layout_marginLeft="16dp"
-        app:srcCompat="@drawable/second_view_line" />
+        app:srcCompat="@drawable/second_view_line"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
 
     <ImageView
         android:id="@+id/second_view_menu"
@@ -78,6 +82,8 @@
         android:layout_alignBottom="@+id/second_view_date"
         android:layout_alignLeft="@+id/second_view_line"
         android:layout_alignStart="@+id/second_view_line"
-        app:srcCompat="@drawable/second_view_menu" />
+        app:srcCompat="@drawable/second_view_menu"
+        android:scaleType="fitCenter"
+        android:adjustViewBounds="true"/>
 
 </RelativeLayout>
