@@ -31,7 +31,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginTop="30dp"
         android:layout_marginRight="35dp"
-        android:text="confirm" />
+        android:text="confirm"
+        android:background="@drawable/click_effect" />
 
     <TextView
         android:id="@+id/write_view_back"
@@ -40,7 +41,8 @@
         android:layout_alignParentLeft="true"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="35dp"
-        android:text="back" />
+        android:text="back"
+        android:background="@drawable/click_effect" />
 
     <ImageView
         android:id="@+id/write_view_line"

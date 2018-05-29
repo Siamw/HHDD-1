@@ -23,6 +23,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:lineSpacingExtra="5dp"
             android:text="" />
 
         <TextView
@@ -79,11 +80,13 @@
         android:id="@+id/second_view_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/second_view_date"
+        android:layout_alignBottom="@+id/second_view_line"
         android:layout_alignLeft="@+id/second_view_line"
         android:layout_alignStart="@+id/second_view_line"
-        app:srcCompat="@drawable/second_view_menu"
+        android:layout_marginBottom="14dp"
+        android:adjustViewBounds="true"
+        android:background="@drawable/click_effect"
         android:scaleType="fitCenter"
-        android:adjustViewBounds="true"/>
+        app:srcCompat="@drawable/second_view_menu" />
 
 </RelativeLayout>
