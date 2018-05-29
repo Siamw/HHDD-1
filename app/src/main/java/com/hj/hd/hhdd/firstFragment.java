@@ -8,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -65,6 +67,7 @@ public class firstFragment extends Fragment {
     int sysYear;
     int sysMonth;
     int dataNum=0;
+    int dataLength;//마지막 입력값이 출력이 되지 않는 것을 고치기 위한 속임수
 
 
     //현재 날짜 불러오기 위함
@@ -135,9 +138,6 @@ public class firstFragment extends Fragment {
 
 
 
-        //setOnMonthChangedListener
-
-
         // 데이터 불러오기
 
         try {
@@ -154,12 +154,18 @@ public class firstFragment extends Fragment {
                 if (str.substring(5, 7).equals(str_sysMonth)) {
                     num++;
                     dataNum++;//data의 개수
-                    int length=dateData.length;
+
                     dateData[num]= str.substring(0,4)+','+str.substring(5,7)+','+str.substring(8,10);
                     Log.d("데이터어어어어어어엉", str.substring(0,4)+','+str.substring(5,7)+','+str.substring(8,10));
 
                 }
             }
+
+
+            dateData[dataNum]="3000,12,25";
+
+            Log.d("마지막데이터어어어어어어어엉+nnn", dateData[dataNum]+dataNum);
+
 
             br.close();
 
@@ -170,6 +176,16 @@ public class firstFragment extends Fragment {
         String[] result = dateData;
 
        new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
+
+
+       materialCalendarView.setOnMonthChangedListener(new OnMonthChangedListener() {
+           @Override
+           public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+
+               Log.d("달을넘겻다 빠바밤 빠바밤 어딜체크하알까", date.toString());
+
+           }
+       });
 
         materialCalendarView.setOnDateChangedListener(new OnDateSelectedListener() {
             @Override
@@ -183,7 +199,13 @@ public class firstFragment extends Fragment {
         return layout;
     }
 
+    public class MonthChange implements OnMonthChangedListener{
 
+        @Override
+        public void onMonthChanged(MaterialCalendarView widget, CalendarDay date) {
+
+        }
+    }
 
     private class ApiSimulator extends AsyncTask<Void, Void, List<CalendarDay>> {
 
@@ -209,7 +231,7 @@ public class firstFragment extends Fragment {
             /*월은 0이 1월 년,일은 그대로*/
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
             ArrayList<CalendarDay> dates = new ArrayList<>();
-            for (int i = 0; i < dataNum; i++) {
+            for (int i = 0; i < dataNum+1; i++) {
                 CalendarDay day = CalendarDay.from(calendar);
                 String[] time = Time_Result[i].split(",");
                 int year = Integer.parseInt(time[0]);
@@ -237,198 +259,5 @@ public class firstFragment extends Fragment {
         }
 
     }
-
-    /*
-        // prev, next 이미지 onClick 이벤트
-        prevImage = (ImageView) layout.findViewById(R.id.third_view_prev);
-        prevImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (i_nowMonth == 1) {
-                    i_nowMonth = 12;
-                    i_nowYear--;
-                    yearFlag = 1;
-                } else {
-                    i_nowMonth--;
-                    yearFlag = 0;
-                }
-
-                nowYear = i_nowYear + "년";
-                nowMonth = String.format("%02d", i_nowMonth) + "월";
-                period.setText(nowYear + " " + nowMonth);
-                Log.d("prev", nowYear + " + " + nowMonth);
-
-                if (yearFlag == 1) {
-                    loadData(nowYear, nowMonth);
-                } else {
-                    renewData(nowYear, nowMonth);
-                }
-
-                yearFlag = 0;
-
-            }
-        });
-
-        nextImage = (ImageView) layout.findViewById(R.id.third_view_next);
-        nextImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (i_nowYear == sysYear && i_nowMonth == sysMonth) {
-                    if (mToast == null) {
-                        mToast = Toast.makeText(getActivity(), "아직 일어나지 않은 일입니다.", Toast.LENGTH_SHORT);
-                    } else {
-                        mToast.setText("아직 일어나지 않은 일입니다.");
-                    }
-                    mToast.show();
-
-                } else {
-                    if (i_nowMonth == 12) {
-                        i_nowMonth = 1;
-                        i_nowYear++;
-                        yearFlag = 1;
-                    } else {
-                        i_nowMonth++;
-                        yearFlag = 0;
-                    }
-
-                    nowYear = i_nowYear + "년";
-                    nowMonth = String.format("%02d", i_nowMonth) + "월";
-                    period.setText(nowYear + " " + nowMonth);
-                    Log.d("prev", nowYear + " + " + nowMonth);
-
-                    if (yearFlag == 1) {
-                        loadData(nowYear, nowMonth);
-                    } else {
-                        renewData(nowYear, nowMonth);
-                    }
-
-                    yearFlag = 0;
-
-                }
-            }
-        });
-
-
-        return layout;
-    }
-
-    // 년도는 바뀌지 않고 월만 변경되었을 경우
-    public void renewData(String nowYear, String nowMonth) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + nowYear + ".txt"));
-            String readStr = "";
-            String str = null;
-
-            ArrayList<listItem> listData = new ArrayList<>();
-
-            while (((str = br.readLine()) != null)) {
-                Log.d("nowMonth", nowMonth);
-                Log.d("substring", str.substring(6, 9));
-                if (str.substring(6, 9).equals(nowMonth)) {
-
-                    Log.d("string", str);
-                    st = new StringTokenizer(str, "+");
-                    strDate = st.nextToken();
-                    strContext = st.nextToken();
-
-                    strContext = strContext.replace("\\n", "\n");
-
-                    listItem newData = new listItem();
-
-                    strDate = strDate.substring(6, 21);
-
-                    newData.strDate = strDate;
-                    newData.strContent = strContext;
-
-                    listData.add(newData);
-                }
-            }
-            ListAdapter listAdapter = new ListAdapter(listData);
-            listView.setAdapter(listAdapter);
-
-            br.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    // 앱 실행시, 혹은 년도와 월 모두 변경되었을 경우
-
-    public void loadData(String nowYear, String nowMonth) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + nowYear + ".txt"));
-            String readStr = "";
-            String str = null;
-            //StringBuffer data = new StringBuffer();
-            //FileInputStream fis = getActivity().openFileInput ("userdata.txt");
-            //BufferedReader buffer = new BufferedReader(new InputStreamReader(fis));
-            //String str = buffer.readLine();
-
-            ArrayList<listItem> listData = new ArrayList<>();
-
-            while (((str = br.readLine()) != null)) {
-                if (str.substring(6, 9).equals(nowMonth)) {
-
-                    Log.d("string", str);
-                    st = new StringTokenizer(str, "+");
-                    strDate = st.nextToken();
-                    strContext = st.nextToken();
-
-                    strContext = strContext.replace("\\n", "\n");
-
-                    listItem newData = new listItem();
-
-                    strDate = strDate.substring(6, 21);
-
-                    newData.strDate = strDate;
-                    newData.strContent = strContext;
-
-                    listData.add(newData);
-
-                }
-
-            }
-            ListAdapter listAdapter = new ListAdapter(listData);
-            listView.setAdapter(listAdapter);
-
-            br.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-*/
-
-    public void loadData(String[] dateData) {
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(folderPath + "dataOf"+String.valueOf(sysYear) + ".txt"));
-            String readStr = "";
-            String str = null;
-            String nowDate = null;
-            dateData = new String[32];
-
-
-            String str_sysMonth = String.format("%02d", sysMonth);
-
-            while (((str = br.readLine()) != null)) {
-                if (str.substring(5, 7).equals(str_sysMonth)) {
-                    nowDate = str.substring(8,10);
-                    int length=dateData.length;
-                    dateData[length]= str.substring(0,4)+","+str.substring(5,7)+","+str.substring(8,10);
-                    //Log.d("string", str + nowDate);
-
-                }
-            }
-
-            br.close();
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-
 }
-
 
