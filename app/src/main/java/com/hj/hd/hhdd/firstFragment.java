@@ -67,7 +67,6 @@ public class firstFragment extends Fragment {
     int sysYear;
     int sysMonth;
     int dataNum=0;
-    int dataLength;//마지막 입력값이 출력이 되지 않는 것을 고치기 위한 속임수
 
 
     //현재 날짜 불러오기 위함
@@ -75,6 +74,8 @@ public class firstFragment extends Fragment {
     Date date;
     SimpleDateFormat CurDateFormat;
     String strCurDate;
+    String changeMonthDay;
+    int lengthOfString;
 
     // prev, next 이미지 관련
     ImageView prevImage;
@@ -184,8 +185,68 @@ public class firstFragment extends Fragment {
 
                Log.d("달을넘겻다 빠바밤 빠바밤 어딜체크하알까", date.toString());
 
+               changeMonthDay=date.toString();
+                lengthOfString=changeMonthDay.length();
+               //현재 날짜에서 년, 월 추출
+               Log.d("길이가넘는다구??", String.valueOf(changeMonthDay.length())+"+++"+lengthOfString);
+               nowYear = changeMonthDay.substring(12, 16);
+               i_nowYear = Integer.parseInt(nowYear);
+               nowMonth = changeMonthDay.substring(17,lengthOfString);
+
+               Log.d("잘 되었을까유ㅠㅠㅠㅠㅠ", nowYear +"++++"+nowMonth);
+
+               String[] onlyMonth = nowMonth.split("-");
+               int monthhh = Integer.parseInt(onlyMonth[0]);//'-'앞부분만 달로 인식 , 1자리일수도2자리일수도있기
+                                                            //때문에 이런 방법을 사용해서 달을 추출
+               i_nowMonth = Integer.parseInt(String.valueOf(monthhh));
+
+               sysYear = i_nowYear;
+               sysMonth = i_nowMonth;
 
 
+               Log.d("now year and month  :  ", String.valueOf(sysYear) + " , " + String.valueOf(sysMonth));
+
+
+
+               // 데이터 불러오기
+
+               try {
+                   BufferedReader br = new BufferedReader(new FileReader(folderPath +"dataOf" + String.valueOf(sysYear) + ".txt"));
+                   String readStr = "";
+                   String str = null;
+                   int num = -1;
+                   dataNum=0;
+                   dateData = new String[32];
+
+
+                   String str_sysMonth = String.format("%02d", sysMonth);
+
+                   while (((str = br.readLine()) != null)) {
+                       if (str.substring(5, 7).equals(str_sysMonth)) {
+                           num++;
+                           dataNum++;//data의 개수
+
+                           dateData[num]= str.substring(0,4)+','+str.substring(5,7)+','+str.substring(8,10);
+                           Log.d("데이터어어어어어어엉", str.substring(0,4)+','+str.substring(5,7)+','+str.substring(8,10));
+
+                       }
+                   }
+
+
+                   dateData[dataNum]="3000,12,25";
+
+                   Log.d("마지막데이터어어어어어어어엉+nnn", dateData[dataNum]+dataNum);
+
+
+                   br.close();
+
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
+
+               String[] result = dateData;
+
+               new ApiSimulator(result).executeOnExecutor(Executors.newSingleThreadExecutor());
 
 
 
