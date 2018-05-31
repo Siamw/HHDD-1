@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
 
     RelativeLayout mainLayout;
 
+
     private final long FINISH_INTERVAL_TIME = 2000;
     private long backPressedTime = 0;
 
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         tb.setTag(2);
 
         sb.setSelected(true);
+
 
         vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
         {

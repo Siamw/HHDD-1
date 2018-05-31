@@ -1,12 +1,14 @@
 package com.hj.hd.hhdd;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,13 +16,10 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -60,6 +59,12 @@ public class secondFragment extends Fragment{
     TextView writeText;
 
     ImageView treeImage;
+
+    // navigation drawer
+    ListView navigationList;
+    DrawerLayout menuDrawer;
+
+    RelativeLayout layout;
 
     //메인메뉴 이미지버튼
     ImageView menuImage;
@@ -124,17 +129,44 @@ public class secondFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
     {
-        RelativeLayout layout = (RelativeLayout) inflater.inflate(R.layout.second_view, container, false);
+        // mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        layout = (RelativeLayout) inflater.inflate(R.layout.second_view, container, false);
 
         mainDateText = (TextView)layout.findViewById(R.id.second_view_date);
         totalText = (TextView)layout.findViewById(R.id.second_view_total);
         personText = (TextView)layout.findViewById(R.id.second_view_person);
 
+        menuDrawer = (DrawerLayout) layout.findViewById(R.id.drawer);
+
+        NavigationView navigationView = (NavigationView) layout.findViewById(R.id.nav_view);
         wiseArySize = wiseSaying.length;
 
         printWiseText();
         timeMethod();
         changeWiseText();
+
+        navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                int id = item.getItemId();
+
+                if (id == R.id.menu_intro)
+                {
+                    Log.d("navClick", "intro");
+                }
+                else if (id == R.id.menu_help)
+                {
+                    Log.d("navClick", "help");
+                }
+                else if (id == R.id.menu_reset)
+                {
+                    Log.d("navClick", "reset");
+                }
+
+                menuDrawer.closeDrawer(GravityCompat.START);
+                return false;
+            }
+        });
 
         writeText = (TextView)layout.findViewById(R.id.second_view_write);
 //        writeText.setOnClickListener(new View.OnClickListener(){
@@ -155,6 +187,7 @@ public class secondFragment extends Fragment{
             @Override
             public void onClick (View v)
             {
+                Log.d("treeClick","treeClick");
                 String writeStr[] = {null, null};
                 writeStr[0] = "W";
                 writeStr[1] = strNow;
@@ -173,7 +206,12 @@ public class secondFragment extends Fragment{
             @Override
             public void onClick (View v)
             {
-                PopupMenu pop = new PopupMenu(v.getContext(),v);
+                Log.d("menuClick","menuClick");
+
+                menuDrawer.openDrawer(GravityCompat.START);
+
+
+                /*PopupMenu pop = new PopupMenu(v.getContext(),v);
                 pop.getMenuInflater().inflate(R.menu.menu_main, pop.getMenu());
 
                 pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener(){
@@ -261,7 +299,7 @@ public class secondFragment extends Fragment{
                         return false;
                     }
                 });
-                pop.show();
+                pop.show();*/
             }
         });
         return layout;

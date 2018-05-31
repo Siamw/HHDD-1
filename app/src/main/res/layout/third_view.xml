@@ -26,7 +26,8 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="30dp"
         android:layout_marginLeft="35dp"
-        app:srcCompat="@drawable/third_view_prev" />
+        app:srcCompat="@drawable/third_view_prev"
+        android:background="@drawable/click_effect"/>
 
     <ImageView
         android:id="@+id/third_view_next"
@@ -36,15 +37,16 @@
         android:layout_alignParentTop="true"
         android:layout_marginTop="30dp"
         android:layout_marginRight="35dp"
-        app:srcCompat="@drawable/third_view_next" />
+        app:srcCompat="@drawable/third_view_next"
+        android:background="@drawable/click_effect"/>
 
     <TextView
         android:id="@+id/third_view_period"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="33dp"
+        android:layout_alignTop="@+id/third_view_next"
         android:layout_centerHorizontal="true"
         android:gravity="center"
+        android:layout_marginTop="23dp"
         android:text="TextView" />
 </RelativeLayout>

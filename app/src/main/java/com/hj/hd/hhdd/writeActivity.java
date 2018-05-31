@@ -24,7 +24,7 @@ public class writeActivity extends AppCompatActivity {
     TextView backText;
     TextView confirmText;
 
-    String context;
+    String context="";
 
     EditText editContext;
 
@@ -71,63 +71,67 @@ public class writeActivity extends AppCompatActivity {
             {
                 Intent mainIntent = new Intent(v.getContext(), MainActivity.class);
                 finish();
+
                 startActivity(mainIntent);
+                overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.fade_out);
             }
         });
 
         confirmText.setOnClickListener(new View.OnClickListener(){
             @Override
-            public void onClick (View v)
-            {
-                context = editContext.getText().toString();
+            public void onClick (View v) {
                 Intent confirmIntent = new Intent(v.getContext(), MainActivity.class);
+                context = editContext.getText().toString();
+
+                if (context.getBytes().length <= 0) {
+                    Log.d("no", "nooo");
+                    finish();
+                    startActivity(confirmIntent);
+                }
+
+
                 //confirmIntent.putExtra("data", context);
 
-                context = context.replace("\n", "\\n");
+                else {
 
-                try {
-                    String tempDate = intentData[1].substring(0,4);
+                    context = context.replace("\n", "\\n");
 
-                    if (intentData[0].equals("W"))
-                    {
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt", true));
-                        bw.write(intentData[1] + "+" + context + "\n");
+                    try {
+                        String tempDate = intentData[1].substring(0, 4);
 
-                        bw.close();
-                    }
-                    else if (intentData[0].equals("M"))
-                    {
-                        BufferedReader br = new BufferedReader(new FileReader(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt"));
+                        if (intentData[0].equals("W")) {
+                            BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt", true));
+                            bw.write(intentData[1] + "+" + context + "\n");
 
-                        String str;
-                        String dummy = "";
+                            bw.close();
+                        } else if (intentData[0].equals("M")) {
+                            BufferedReader br = new BufferedReader(new FileReader(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt"));
 
-                        while (((str = br.readLine()) != null))
-                        {
-                            if (str.substring(0,22).equals(intentData[1]))
-                            {
-                                str = intentData[1] + "+" + context + "\n";
-                                dummy = dummy + str;
+                            String str;
+                            String dummy = "";
+
+                            while (((str = br.readLine()) != null)) {
+                                if (str.substring(0, 22).equals(intentData[1])) {
+                                    str = intentData[1] + "+" + context + "\n";
+                                    dummy = dummy + str;
+                                } else {
+                                    dummy = dummy + str + "\n";
+                                }
                             }
-                            else
-                            {
-                                dummy = dummy + str + "\n";
-                            }
+                            br.close();
+
+                            BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt"));
+                            dummy = dummy;
+                            bw.write(dummy);
+                            bw.close();
                         }
-                        br.close();
-
-                        BufferedWriter bw = new BufferedWriter(new FileWriter(getFilesDir() + "/userdata/" + "dataOf" + tempDate + ".txt"));
-                        dummy = dummy;
-                        bw.write(dummy);
-                        bw.close();
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-                } catch (Exception e)
-                {
-                    e.printStackTrace();
+                    ((MainActivity) MainActivity.mContext).renewScreen();
+                    finish();
+                    startActivity(confirmIntent);
                 }
-                ((MainActivity)MainActivity.mContext).renewScreen();
-                finish();
-                startActivity(confirmIntent);
             }
         });
 

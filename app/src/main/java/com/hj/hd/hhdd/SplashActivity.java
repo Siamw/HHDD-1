@@ -39,7 +39,7 @@ public class SplashActivity extends AppCompatActivity {
         files = new File (flagPath);
 
         Handler hd = new Handler();
-        hd.postDelayed(new splashhandler(), 5000); // 1초 후에 hd handler 실행  3000ms = 3초
+        hd.postDelayed(new splashhandler(), 2000); // 1초 후에 hd handler 실행  3000ms = 3초
 
 
     }
