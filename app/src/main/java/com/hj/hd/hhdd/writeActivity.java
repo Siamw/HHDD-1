@@ -46,7 +46,7 @@ public class writeActivity extends AppCompatActivity {
 
         // intentData[1]이 2018.05.24 12:11 오후 이런 식으로 되어있걸랑여?
         // 그러니까 4월달에 입력하고 프면
-        intentData[1] = intentData[1].replace("29", "07");
+        //intentData[1] = intentData[1].replace("31", "27");
         // 위에 코드 바로 여기에다가 추가하면 4월달에 입력됩니더.
         // 만약 4월이 아닌 2월을 하고프면 "04"를 "02"로 바꾸면 됩니다.
         // 만일 년도를 변경하고싶다. 그러면

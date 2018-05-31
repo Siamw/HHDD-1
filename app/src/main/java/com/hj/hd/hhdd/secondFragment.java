@@ -1,5 +1,7 @@
 package com.hj.hd.hhdd;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,6 +22,8 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
@@ -161,6 +165,42 @@ public class secondFragment extends Fragment{
                 else if (id == R.id.menu_reset)
                 {
                     Log.d("navClick", "reset");
+                    AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(getActivity());
+                    alertDialogBuilder.setTitle("데이터 초기화");
+
+                    // AlertDialog 셋팅
+                    alertDialogBuilder
+                            .setMessage("모든 데이터를 초기화하시겠습니까?")
+                            .setCancelable(false)
+                            .setPositiveButton("넵",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            // 모든 데이터 제거
+                                            String flagPath = getActivity().getFilesDir() + "/userdata";
+                                            File files = new File(flagPath);
+                                            files.delete();
+                                            Runtime runtime = Runtime.getRuntime();
+                                            String cmd = "rm -R " + flagPath;
+                                            try {
+                                                runtime.exec(cmd);
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    })
+                            .setNegativeButton("아녕",
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(
+                                                DialogInterface dialog, int id) {
+                                            // 다이얼로그를 취소한다
+                                            dialog.cancel();
+                                        }
+                                    });
+                    AlertDialog alertDialog = alertDialogBuilder.create();
+
+                    // 다이얼로그 보여주기
+                    alertDialog.show();
                 }
 
                 menuDrawer.closeDrawer(GravityCompat.START);
