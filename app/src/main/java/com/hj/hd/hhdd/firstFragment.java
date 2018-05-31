@@ -184,6 +184,13 @@ public class firstFragment extends Fragment {
 
                Log.d("달을넘겻다 빠바밤 빠바밤 어딜체크하알까", date.toString());
 
+
+
+
+
+
+
+
            }
        });
 
@@ -225,21 +232,24 @@ public class firstFragment extends Fragment {
                 e.printStackTrace();
             }
             Calendar calendar = Calendar.getInstance();
-
+            Log.d("calendar라는데 뭐가출력되나 봐봅시당" , calendar.toString());
 
              /*특정날짜 달력에 점표시해주는곳*/
             /*월은 0이 1월 년,일은 그대로*/
             //string 문자열인 Time_Result 을 받아와서 ,를 기준으로짜르고 string을 int 로 변환
             ArrayList<CalendarDay> dates = new ArrayList<>();
-            for (int i = 0; i < dataNum+1; i++) {
+            for (int i = 0; i < dataNum+1; i++) {//처음에 현재 날짜가 일이가 없음애도 들어가서 점이 찍힘
                 CalendarDay day = CalendarDay.from(calendar);
+                Log.d("day라는데 뭐가출력되나 봐봅시당" , day.toString());
                 String[] time = Time_Result[i].split(",");
+                Log.d("time에 뭐가출력되나 봐봅시당." , time.toString());
                 int year = Integer.parseInt(time[0]);
                 int month = Integer.parseInt(time[1]);
                 int dayy = Integer.parseInt(time[2]);
 
                 dates.add(day);
-                calendar.set(year, month - 1, dayy);
+                if(i!=0)
+                {calendar.set(year, month - 1, dayy);}
             }
 
 
